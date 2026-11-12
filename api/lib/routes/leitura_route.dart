@@ -40,3 +40,30 @@ Future<Response> criarLeitura(Request request) async {
     );
   }
 }
+
+Future <Response> listarLeituras(Request request) async {
+  try {
+    final leituras = await leituraRepository.listar();
+
+    return Response(
+      200,
+      body: jsonEncode({
+        'data': leituras.map((leitura) => leitura.toJson()).toList(),
+      }),
+      headers: {
+        'content-type': 'application/json',
+      },
+    );
+  } catch (e) {
+    return Response(
+      500,
+      body: jsonEncode({
+        'error': 'Não foi possível listar as leituras',
+        'message': e.toString(),
+      }),
+      headers: {
+        'content-type': 'application/json',
+      },
+    );
+  }
+}
